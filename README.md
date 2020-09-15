@@ -15,6 +15,12 @@ export default {
 };
 ```
 
+**Notes**
+
+ Check Zeplin email to see the designs to implement for the exercise.
+
+As part of implementing the requirements in the README, please deploy the completed React application to **Netlify** or a similar static-site-hosting service, and **provide us with the link to the working application**. Our first review will be of whether the application meets the design and function requirements, and, if it does, we will review the code.
+
 - Fill in the endpoint and API key you received in the `env.js` file.
 
 - You should have also received a link to Zeplin containing the design you have to implement.
