@@ -3,6 +3,7 @@ import ApolloClient, { gql } from 'apollo-boost';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import env from './env';
+import Users from './components/user/Users'
 
 const client = new ApolloClient({
   uri: env.GRAPHQL_ENDPOINT,
@@ -37,11 +38,12 @@ const App = () => {
   }
 
   return (
-    <pre>
-      <code>
-        {JSON.stringify(data, null, 2)}
-      </code>
-    </pre>
+    <Users data={data} />
+    // <pre>
+    //   <code>
+    //     {JSON.stringify(data, null, 2)}
+    //   </code>
+    // </pre>
   )
 }
 
