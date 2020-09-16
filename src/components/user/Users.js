@@ -104,9 +104,9 @@ const Users = ({ data }) => {
 
   return (
     <Container>
-      <button style={{ display: 'none' }} onClick={resetUsers}>
+      <button style={{ display: 'block' }} onClick={resetUsers}>
         RESET
-      </button>
+      </button> 
       <form>
         <H1>Users</H1>
         <Button onClick={handleSubmit} type="submit">
