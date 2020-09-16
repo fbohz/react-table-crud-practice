@@ -2,18 +2,19 @@ import { ApolloProvider, useQuery, useMutation } from '@apollo/react-hooks';
 import ApolloClient, { gql } from 'apollo-boost';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import env from './env';
-import Users from './components/user/Users'
+import Users from './components/user/Users';
 
 const client = new ApolloClient({
   uri: env.GRAPHQL_ENDPOINT,
-  request: operation => {
+  request: (operation) => {
     operation.setContext({
       headers: {
         'x-api-key': env.GRAPHQL_API_KEY,
-      }
-    })
-  }
+      },
+    });
+  },
 });
 
 const ALL_USERS_QUERY = gql`
@@ -28,23 +29,10 @@ const ALL_USERS_QUERY = gql`
 
 //  resetUsers: Boolean!
 
-const RESET_USERS = gql`
-    mutation resetUsers {
-      resetUsers
-  }
-`
+
 
 const App = () => {
   const { loading, error, data } = useQuery(ALL_USERS_QUERY);
-  const [reset] = useMutation(RESET_USERS)
-
-  const resetUsers = async () => {
-    const response = await reset()
-
-    if (response) {
-      console.log(response)
-    }
-  }
 
   if (loading) {
     return <p>Loading...</p>;
@@ -55,21 +43,24 @@ const App = () => {
   }
 
   return (
-    <>
-    <button style={{display: "block"}} onClick={resetUsers}>RESET</button>
-    <Users data={data} />
-    </>
+    <Switch>
+      <Route exact path='/' render={() =>  <Users data={data} /> } />
+      {/* <Users data={data} /> */}
+      {/* <Route exact path='/users/:userId' component={ HomeContainer } /> */}
+    </Switch>
     // <pre>
     //   <code>
     //     {JSON.stringify(data, null, 2)}
     //   </code>
     // </pre>
-  )
-}
+  );
+};
 
 const Root = () => (
   <ApolloProvider client={client}>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </ApolloProvider>
 );
 

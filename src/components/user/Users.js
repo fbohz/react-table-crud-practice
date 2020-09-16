@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import {useQuery, useMutation } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost'
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
 
 const Container = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
@@ -61,6 +61,11 @@ const H1 = styled.h1`
   display: inline;
 `;
 
+const RESET_USERS = gql`
+  mutation resetUsers {
+    resetUsers
+  }
+`;
 
 const ALL_USERS_QUERY = gql`
   query {
@@ -80,90 +85,106 @@ const DELETE_USERS = gql`
 
 const Users = ({ data }) => {
   const { allUsers } = data;
-  const [checked, setChecked] = useState([])
-  const [users, setUsers] = useState(allUsers)
+  const [checked, setChecked] = useState([]);
+  const [users, setUsers] = useState(allUsers);
   const [deleteUsers] = useMutation(DELETE_USERS);
+  const [reset] = useMutation(RESET_USERS);
 
   //   console.log(allUsers);
   //   console.log(data.data.allUsers)
-  const editUser = user => {
+  const resetUsers = async () => {
+    const response = await reset();
 
-  }  
+    if (response) {
+      console.log(response);
+    }
+  };
+  
+  const editUser = (user) => {};
 
   const renderUser = (user) => {
-      console.log(user)
-  }
+    console.log(user);
+  };
 
-  const handleSubmit = async e => {
-      e.preventDefault()
-      if (checked.length < 1) {
-          alert('Please make selection!')
-      } else {
-          const newUsers = users.filter(u => {
-              return !checked.includes(u.email)
-          })
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (checked.length < 1) {
+      alert('Please make selection!');
+    } else {
+      const newUsers = users.filter((u) => {
+        return !checked.includes(u.email);
+      });
 
-          if(window.confirm('Are you sure you wanna delete user(s)?')) {
-              const response = await deleteUsers({
-                    // checked
-                  variables: {
-                        emails: checked
-                    }
-              })
-              setUsers(newUsers)
-              setChecked([])
+      if (window.confirm('Are you sure you wanna delete user(s)?')) {
+        const response = await deleteUsers({
+          // checked
+          variables: {
+            emails: checked,
+          },
+        });
+        setUsers(newUsers);
+        setChecked([]);
 
-              if (response) {
-                console.log(response)
-              }
-          }
+        if (response) {
+          console.log(response);
+        }
       }
-  }  
+    }
+  };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     //   e.persist()
     // console.log(e.target)
     if (checked.includes(e.target.value)) {
-        const newChecked = checked.filter(n => n !== e.target.value)
-        setChecked(newChecked)
+      const newChecked = checked.filter((n) => n !== e.target.value);
+      setChecked(newChecked);
     } else {
-        setChecked([
-            ...checked,
-            e.target.value
-        ])
-        
+      setChecked([...checked, e.target.value]);
     }
-  }
+  };
 
   return (
     <Container>
+      <button style={{ display: 'block' }} onClick={resetUsers}>
+        RESET
+      </button>
       <form>
-      <H1>Users</H1>
-      <Button onClick={handleSubmit} type="submit">Delete</Button>
-      <Table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>EMAIL</th>
-            <th>NAME</th>
-            <th>ROLE</th>
-          </tr>
-        </thead>
+        <H1>Users</H1>
+        <Button onClick={handleSubmit} type="submit">
+          Delete
+        </Button>
+        <Table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>EMAIL</th>
+              <th>NAME</th>
+              <th>ROLE</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {users.map((user, i) => {
-              const key = user.email
-            return (
-              <tr key={user.email} className="not-first" onClick={ () => renderUser(user)}>
-                <td><input onChange={handleChange} type="checkbox" id="" name="user" value={user.email} /></td>
-                <td>{user.email}</td>
-                <td>{user.name}</td>
-                <td>{user.role}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+          <tbody>
+            {users.map((user, i) => {
+              const key = user.email;
+              return (
+                <tr key={user.email} className="not-first" onClick={() => renderUser(user)}>
+                  <td>
+                    <input
+                      onChange={handleChange}
+                      type="checkbox"
+                      id=""
+                      name="user"
+                      value={user.email}
+                    />
+                  </td>
+                  <td>{user.email}</td>
+                  <td>{user.name}</td>
+                  <td>{user.role}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
       </form>
     </Container>
   );
