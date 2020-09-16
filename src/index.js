@@ -3,16 +3,27 @@ import ApolloClient, { gql } from 'apollo-boost';
 import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import env from './env';
+// import env from './env';
 import Users from './components/user/Users';
 import ShowUser from './components/user/ShowUser';
 
+// const client = new ApolloClient({
+//   uri: env.GRAPHQL_ENDPOINT,
+//   request: (operation) => {
+//     operation.setContext({
+//       headers: {
+//         'x-api-key': env.GRAPHQL_API_KEY,
+//       },
+//     });
+//   },
+// });
+
 const client = new ApolloClient({
-  uri: env.GRAPHQL_ENDPOINT,
+  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
   request: (operation) => {
     operation.setContext({
       headers: {
-        'x-api-key': env.GRAPHQL_API_KEY,
+        'x-api-key': process.env.REACT_APP_GRAPHQL_API_KEY,
       },
     });
   },
@@ -34,7 +45,7 @@ const ALL_USERS_QUERY = gql`
 
 const App = () => {
   const { loading, error, data } = useQuery(ALL_USERS_QUERY);
-
+  console.log(process.env)
   // useEffect(() => {
   //   document.location.reload()
   // }, []);
