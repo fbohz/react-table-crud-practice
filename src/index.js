@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import env from './env';
 import Users from './components/user/Users';
+import ShowUser from './components/user/ShowUser';
 
 const client = new ApolloClient({
   uri: env.GRAPHQL_ENDPOINT,
@@ -45,8 +46,7 @@ const App = () => {
   return (
     <Switch>
       <Route exact path='/' render={() =>  <Users data={data} /> } />
-      {/* <Users data={data} /> */}
-      {/* <Route exact path='/users/:userId' component={ HomeContainer } /> */}
+      <Route exact path='/users/:userId' component={ ShowUser } />
     </Switch>
     // <pre>
     //   <code>

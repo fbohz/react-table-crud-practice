@@ -2,64 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
+import { useHistory } from 'react-router-dom';
+import {Container, Table, Button, H1} from './UserStyles'
 
-const Container = styled.div`
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
-    'Helvetica Neue', sans-serif;
-`;
-
-const Table = styled.table`
-  width: 883px;
-  height: 13px;
-  font-size: 13px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0.14px;
-  /* color: #333333; */
-
-  td {
-    border-bottom: 1px solid #ddd;
-
-    text-align: left;
-    padding: 8px;
-  }
-  .not-first:hover {
-    background-color: #dddddd;
-    cursor: pointer;
-  }
-  th {
-    border-bottom: 1px solid #ddd;
-    border-top: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-    color: gray;
-  }
-`;
-
-const Button = styled.button`
-  width: 76px;
-  height: 28px;
-  border-radius: 4px;
-  border: solid 1px #ee0000;
-  background-color: white;
-  float: right;
-
-  &:active {
-    box-shadow: 0 5px #666;
-    transform: translateY(4px);
-  }
-
-  &:hover {
-    cursor: pointer;
-    background-color: #db212160;
-  }
-`;
-
-const H1 = styled.h1`
-  display: inline;
-`;
 
 const RESET_USERS = gql`
   mutation resetUsers {
@@ -89,6 +34,7 @@ const Users = ({ data }) => {
   const [users, setUsers] = useState(allUsers);
   const [deleteUsers] = useMutation(DELETE_USERS);
   const [reset] = useMutation(RESET_USERS);
+  const history = useHistory();
 
   //   console.log(allUsers);
   //   console.log(data.data.allUsers)
@@ -99,11 +45,16 @@ const Users = ({ data }) => {
       console.log(response);
     }
   };
-  
+
   const editUser = (user) => {};
 
   const renderUser = (user) => {
-    console.log(user);
+      const enc = window.btoa(user.email)
+    //   history.push(`/users/${enc}`);
+    history.push({
+        pathname: `/users/${enc}`,
+        state: {user: user}
+    })
   };
 
   const handleSubmit = async (e) => {
