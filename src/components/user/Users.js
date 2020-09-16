@@ -1,5 +1,23 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
+import {useQuery, useMutation } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost'
+
+const ALL_USERS_QUERY = gql`
+  query {
+    allUsers {
+      email
+      name
+      role
+    }
+  }
+`;
+// deleteUsers(emails: [ID]!): [ID!]!
+const DELETE_USERS = gql`
+  mutation deleteUsers($emails: Array!) {
+    deleteUsers(emails: $emails)
+  }
+`;
 
 const Container = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
@@ -63,20 +81,31 @@ const Users = ({ data }) => {
   const { allUsers } = data;
   const [checked, setChecked] = useState([])
   const [users, setUsers] = useState(allUsers)
+  const [deleteUsers] = useMutation(DELETE_USERS);
+
   //   console.log(allUsers);
   //   console.log(data.data.allUsers)
+  const editUser = user => {
+
+  }  
+
   const handleSubmit = e => {
       e.preventDefault()
-      console.log(users)
-    //   const newUsers = users.filter(u => !users.includes(u))
-      const newUsers = users.filter(u => {
-          return !checked.includes(u.email)
-      })
-    //   const newUsers = users.map(user => {
+      if (checked.length < 1) {
+          alert('Please make selection!')
+      } else {
+          const newUsers = users.filter(u => {
+              return !checked.includes(u.email)
+          })
 
-    //   })
-      setUsers(newUsers)
-      console.log(newUsers)
+          if(window.confirm('Are you sure you wanna delete user(s)?')) {
+            //   deleteUsers({
+            //       variables: newUsers
+            //   })
+              setUsers(newUsers)
+              setChecked([])
+          }
+      }
   }  
 
   const handleChange = e => {

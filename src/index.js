@@ -1,4 +1,4 @@
-import { ApolloProvider, useQuery } from '@apollo/react-hooks';
+import { ApolloProvider, useQuery, useMutation } from '@apollo/react-hooks';
 import ApolloClient, { gql } from 'apollo-boost';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -26,8 +26,25 @@ const ALL_USERS_QUERY = gql`
   }
 `;
 
+//  resetUsers: Boolean!
+
+const RESET_USERS = gql`
+    mutation resetUsers {
+      resetUsers
+  }
+`
+
 const App = () => {
   const { loading, error, data } = useQuery(ALL_USERS_QUERY);
+  const [reset] = useMutation(RESET_USERS)
+
+  const resetUsers = async () => {
+    const response = await reset()
+
+    if (response) {
+      console.log(response)
+    }
+  }
 
   if (loading) {
     return <p>Loading...</p>;
@@ -38,7 +55,10 @@ const App = () => {
   }
 
   return (
+    <>
+    <button style={{display: "block"}} onClick={resetUsers}>RESET</button>
     <Users data={data} />
+    </>
     // <pre>
     //   <code>
     //     {JSON.stringify(data, null, 2)}
