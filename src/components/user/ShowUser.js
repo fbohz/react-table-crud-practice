@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useLocation, Redirect, useHistory, Link} from 'react-router-dom';
-import { Container, Button, H1 } from './UserStyles';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useLocation, useHistory} from 'react-router-dom';
+import { Container, Button, H1, FlexColumn, FlexRow, Input } from './UserStyles';
+import { useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import Users from './Users';
 
-
-// updateUser(email: ID!, newAttributes: UserAttributesInput!): User!
 const UPDATE_USER = gql`
   mutation updateUser($email: ID!, $newAttributes: UserAttributesInput!) {
     updateUser(email: $email, newAttributes: $newAttributes) {
@@ -18,7 +15,7 @@ const UPDATE_USER = gql`
 
 const ShowUser = (props) => {
   const location = useLocation();
-  const email = window.atob(window.location.pathname.replace('/users/', ''));
+//   const email = window.atob(window.location.pathname.replace('/users/', ''));
   const getUser = location.state && location.state.user;
   const [user, setUser] = useState(getUser);
   const [checked, setChecked] = useState('');
@@ -26,17 +23,15 @@ const ShowUser = (props) => {
   const [updateUser] = useMutation(UPDATE_USER);
   const history = useHistory();
 
-  //   console.log(user);
   useEffect(() => {
     if (user) {
       setChecked(user.role);
       setName(user.name);
     }
-  }, []);
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(name, checked);
     const newUser = {
       email: user.email,
       name,
@@ -70,15 +65,6 @@ const ShowUser = (props) => {
   const handleOptionChange = (changeEvent) => {
     setChecked(changeEvent.target.value);
   };
-
-  //   const isChecked = (value) => {
-  //     // setChecked(value);
-  //     if (value === checked) {
-  //         return true
-  //     } else {
-  //         return false
-  //     }
-  //   };
 
   return (
     <UserContainer>
@@ -152,7 +138,7 @@ const ShowUser = (props) => {
         </form>
       ) : (
         <h1>
-          Something funky happened🤯! <br /> Just go back to the previous page and try again.
+          Something funky happened<span role="img" aria-label="emoji">🤯</span>! <br /> Just go back to the previous page and try again.
         </h1>
       )}
     </UserContainer>
@@ -165,16 +151,6 @@ const UserContainer = styled(Container)`
   padding: 40px;
 `;
 
-const FlexRow = styled.div`
-  display: flex;
-`;
-
-const FlexColumn = styled.div`
-  flex: 50%;
-  padding: 10px;
-  height: 400px;
-`;
-
 const SaveBtn = styled(Button)`
   border: solid 1px #0329559a;
   color: white;
@@ -184,18 +160,4 @@ const SaveBtn = styled(Button)`
     cursor: pointer;
     background-color: #1875df9f;
   }
-`;
-
-const Input = styled.input`
-  margin: 10px auto;
-  width: 240px;
-
-  &:focus {
-    border: 1px solid rgba(59, 153, 252, 0.5);
-    box-shadow: 0 0 10px #719ece;
-  }
-`;
-
-const Label = styled.label`
-  display: block;
 `;

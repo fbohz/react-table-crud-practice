@@ -57,3 +57,28 @@ export const Button = styled.button`
 export const H1 = styled.h1`
   display: inline;
 `;
+
+export const FlexRow = styled.div`
+  display: flex;
+`;
+
+export const FlexColumn = styled.div`
+  flex: 50%;
+  padding: 10px;
+  height: 400px;
+`;
+
+
+export const Input = styled.input`
+  margin: 10px auto;
+  width: 240px;
+
+  &:focus {
+    border: 1px solid rgba(59, 153, 252, 0.5);
+    box-shadow: 0 0 10px #719ece;
+  }
+`;
+
+export const Label = styled.label`
+  display: block;
+`;

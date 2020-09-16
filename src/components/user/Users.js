@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { useHistory } from 'react-router-dom';
-import {Container, Table, Button, H1} from './UserStyles'
-
+import { Container, Table, Button, H1 } from './UserStyles';
+// import styled from 'styled-components';
 
 const RESET_USERS = gql`
   mutation resetUsers {
@@ -12,16 +11,6 @@ const RESET_USERS = gql`
   }
 `;
 
-const ALL_USERS_QUERY = gql`
-  query {
-    allUsers {
-      email
-      name
-      role
-    }
-  }
-`;
-// deleteUsers(emails: [ID]!): [ID!]!
 const DELETE_USERS = gql`
   mutation deleteUsers($emails: [ID]!) {
     deleteUsers(emails: $emails)
@@ -36,8 +25,6 @@ const Users = ({ data }) => {
   const [reset] = useMutation(RESET_USERS);
   const history = useHistory();
 
-  //   console.log(allUsers);
-  //   console.log(data.data.allUsers)
   const resetUsers = async () => {
     const response = await reset();
 
@@ -46,15 +33,13 @@ const Users = ({ data }) => {
     }
   };
 
-  const editUser = (user) => {};
 
   const renderUser = (user) => {
-      const enc = window.btoa(user.email)
-    //   history.push(`/users/${enc}`);
+    const enc = window.btoa(user.email);
     history.push({
-        pathname: `/users/${enc}`,
-        state: {user: user}
-    })
+      pathname: `/users/${enc}`,
+      state: { user: user },
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -68,7 +53,6 @@ const Users = ({ data }) => {
 
       if (window.confirm('Are you sure you wanna delete user(s)?')) {
         const response = await deleteUsers({
-          // checked
           variables: {
             emails: checked,
           },
@@ -84,8 +68,6 @@ const Users = ({ data }) => {
   };
 
   const handleChange = (e) => {
-    //   e.persist()
-    // console.log(e.target)
     if (checked.includes(e.target.value)) {
       const newChecked = checked.filter((n) => n !== e.target.value);
       setChecked(newChecked);
@@ -94,19 +76,19 @@ const Users = ({ data }) => {
     }
   };
 
-  const capitalize = word => {
-      if (word === "APP_MANAGER") {
-          return "App Manager"
-      } else {
-        return word[0].toUpperCase() + word.substr(1).toLowerCase()
-      }
-  }
+  const capitalize = (word) => {
+    if (word === 'APP_MANAGER') {
+      return 'App Manager';
+    } else {
+      return word[0].toUpperCase() + word.substr(1).toLowerCase();
+    }
+  };
 
   return (
     <Container>
       <button style={{ display: 'block' }} onClick={resetUsers}>
         RESET
-      </button> 
+      </button>
       <form>
         <H1>Users</H1>
         <Button onClick={handleSubmit} type="submit">
@@ -124,9 +106,8 @@ const Users = ({ data }) => {
 
           <tbody>
             {users.map((user, i) => {
-              const key = user.email;
               return (
-                <tr key={user.email} className="not-first" >
+                <tr key={user.email} className="not-first">
                   <td>
                     <input
                       onChange={handleChange}

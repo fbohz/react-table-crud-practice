@@ -1,11 +1,11 @@
 import { ApolloProvider, useQuery } from '@apollo/react-hooks';
 import ApolloClient, { gql } from 'apollo-boost';
-import React, {useEffect} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-// import env from './env';
 import Users from './components/user/Users';
 import ShowUser from './components/user/ShowUser';
+// import env from './env';
 
 // const client = new ApolloClient({
 //   uri: env.GRAPHQL_ENDPOINT,
@@ -39,16 +39,9 @@ const ALL_USERS_QUERY = gql`
   }
 `;
 
-//  resetUsers: Boolean!
-
-
-
 const App = () => {
   const { loading, error, data } = useQuery(ALL_USERS_QUERY);
   console.log(process.env)
-  // useEffect(() => {
-  //   document.location.reload()
-  // }, []);
 
   if (loading) {
     return <p>Loading...</p>;
