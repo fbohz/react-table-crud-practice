@@ -77,11 +77,6 @@ const DELETE_USERS = gql`
     deleteUsers(emails: $emails)
   }
 `;
-// const DELETE_USERS = gql`
-//   mutation deleteUsers($emails: [ID!]!) {
-//     deleteUsers(emails: $emails)
-//   }
-// `;
 
 const Users = ({ data }) => {
   const { allUsers } = data;
@@ -94,6 +89,10 @@ const Users = ({ data }) => {
   const editUser = user => {
 
   }  
+
+  const renderUser = (user) => {
+      console.log(user)
+  }
 
   const handleSubmit = async e => {
       e.preventDefault()
@@ -153,8 +152,9 @@ const Users = ({ data }) => {
 
         <tbody>
           {users.map((user, i) => {
+              const key = user.email
             return (
-              <tr key={user.email} className="not-first">
+              <tr key={user.email} className="not-first" onClick={ () => renderUser(user)}>
                 <td><input onChange={handleChange} type="checkbox" id="" name="user" value={user.email} /></td>
                 <td>{user.email}</td>
                 <td>{user.name}</td>
