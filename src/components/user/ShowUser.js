@@ -39,16 +39,19 @@ const ShowUser = (props) => {
       __typename: "User"
     };
     const response = await updateUser({
-      // checked
       variables: {
-        emails: checked,
+        email: user.email,
+        newAttributes: {
+            name,
+            role: newUser.role
+        }
       },
     });
 
     if (response) {
       console.log(response);
+      setUser(newUser);
     }
-    setUser(newUser);
   };
 
   const handleTextChange = (changeEvent) => {

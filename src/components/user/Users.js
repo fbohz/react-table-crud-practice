@@ -126,7 +126,7 @@ const Users = ({ data }) => {
             {users.map((user, i) => {
               const key = user.email;
               return (
-                <tr key={user.email} className="not-first" onClick={() => renderUser(user)}>
+                <tr key={user.email} className="not-first" >
                   <td>
                     <input
                       onChange={handleChange}
@@ -136,9 +136,9 @@ const Users = ({ data }) => {
                       value={user.email}
                     />
                   </td>
-                  <td>{user.email}</td>
-                  <td>{user.name}</td>
-                  <td>{capitalize(user.role)}</td>
+                  <td onClick={() => renderUser(user)}>{user.email}</td>
+                  <td onClick={() => renderUser(user)}>{user.name}</td>
+                  <td onClick={() => renderUser(user)}>{capitalize(user.role)}</td>
                 </tr>
               );
             })}
