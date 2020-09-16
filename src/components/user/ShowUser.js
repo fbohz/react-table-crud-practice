@@ -7,8 +7,9 @@ import { gql } from 'apollo-boost';
 
 // updateUser(email: ID!, newAttributes: UserAttributesInput!): User!
 const UPDATE_USER = gql`
+    
   mutation updateUser($email: ID!, $newAttributes: UserAttributesInput!) {
-    updateUser(emails: $emails, newAttributes: $newAttributes)
+    updateUser(email: $email, newAttributes: $newAttributes){email}
   }
 `;
 
@@ -21,7 +22,7 @@ const ShowUser = (props) => {
   const [name, setName] = useState('');
   const [updateUser] = useMutation(UPDATE_USER);
 
-  console.log(user);
+//   console.log(user);
   useEffect(() => {
     if (user) {
       setChecked(user.role);
@@ -31,19 +32,23 @@ const ShowUser = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(name, checked);
+    // console.log(name, checked);
     const newUser = {
       email: user.email,
       name,
       role: checked,
       __typename: "User"
     };
+
+    console.log(newUser)
     const response = await updateUser({
       variables: {
         email: user.email,
-        newAttributes: {
-            name,
-            role: newUser.role
+        newAttributes: { 
+            // UserAttributesInput: {
+                name,
+                role: newUser.role
+            // }
         }
       },
     });
