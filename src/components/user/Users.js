@@ -94,6 +94,14 @@ const Users = ({ data }) => {
     }
   };
 
+  const capitalize = word => {
+      if (word === "APP_MANAGER") {
+          return "App Manager"
+      } else {
+        return word[0].toUpperCase() + word.substr(1).toLowerCase()
+      }
+  }
+
   return (
     <Container>
       <button style={{ display: 'block' }} onClick={resetUsers}>
@@ -130,7 +138,7 @@ const Users = ({ data }) => {
                   </td>
                   <td>{user.email}</td>
                   <td>{user.name}</td>
-                  <td>{user.role}</td>
+                  <td>{capitalize(user.role)}</td>
                 </tr>
               );
             })}

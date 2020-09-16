@@ -3,29 +3,57 @@ import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { Container, Button, H1 } from './UserStyles';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+
+// updateUser(email: ID!, newAttributes: UserAttributesInput!): User!
+const UPDATE_USER = gql`
+  mutation updateUser($email: ID!, $newAttributes: UserAttributesInput!) {
+    updateUser(emails: $emails, newAttributes: $newAttributes)
+  }
+`;
 
 const ShowUser = (props) => {
   const location = useLocation();
   const email = window.atob(window.location.pathname.replace('/users/', ''));
-  const user = location.state && location.state.user;
+  const getUser = location.state && location.state.user;
+  const [user, setUser] = useState(getUser);
   const [checked, setChecked] = useState('');
   const [name, setName] = useState('');
-  //   console.log(checked);
+  const [updateUser] = useMutation(UPDATE_USER);
+
+  console.log(user);
   useEffect(() => {
     if (user) {
-        setChecked(user.role);
-        setName(user.name)
+      setChecked(user.role);
+      setName(user.name);
     }
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(name, checked)
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(name, checked);
+    const newUser = {
+      email: user.email,
+      name,
+      role: checked,
+      __typename: "User"
+    };
+    const response = await updateUser({
+      // checked
+      variables: {
+        emails: checked,
+      },
+    });
+
+    if (response) {
+      console.log(response);
+    }
+    setUser(newUser);
+  };
 
   const handleTextChange = (changeEvent) => {
-    setName(changeEvent.target.value)
-  }
+    setName(changeEvent.target.value);
+  };
 
   const handleOptionChange = (changeEvent) => {
     setChecked(changeEvent.target.value);
@@ -45,7 +73,7 @@ const ShowUser = (props) => {
       {user && user.email ? (
         <form>
           <H1>{user.email}</H1>
-          <SaveBtn type="submit" onClick={handleSubmit} >
+          <SaveBtn type="submit" onClick={handleSubmit}>
             Save
           </SaveBtn>
           <hr />
@@ -55,7 +83,7 @@ const ShowUser = (props) => {
                 <small>Name</small>
               </label>
               <br />
-              <Input name="name" type="text" value={name} onChange={handleTextChange}/>
+              <Input name="name" type="text" value={name} onChange={handleTextChange} />
             </FlexColumn>
             <FlexColumn style={{ borderLeft: '1px solid rgba(77, 76, 76, 0.822)' }}>
               <label htmlFor="role">
