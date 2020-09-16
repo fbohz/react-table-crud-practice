@@ -1,6 +1,6 @@
 import { ApolloProvider, useQuery } from '@apollo/react-hooks';
 import ApolloClient, { gql } from 'apollo-boost';
-import React from 'react';
+import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import env from './env';
@@ -35,6 +35,10 @@ const ALL_USERS_QUERY = gql`
 const App = () => {
   const { loading, error, data } = useQuery(ALL_USERS_QUERY);
 
+  // useEffect(() => {
+  //   document.location.reload()
+  // }, []);
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -42,6 +46,7 @@ const App = () => {
   if (error) {
     return <p>Error: {JSON.stringify(error)}</p>;
   }
+
 
   return (
     <Switch>

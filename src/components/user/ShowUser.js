@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Redirect, useHistory, Link} from 'react-router-dom';
 import { Container, Button, H1 } from './UserStyles';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
+import Users from './Users';
+
 
 // updateUser(email: ID!, newAttributes: UserAttributesInput!): User!
 const UPDATE_USER = gql`
-    
   mutation updateUser($email: ID!, $newAttributes: UserAttributesInput!) {
-    updateUser(email: $email, newAttributes: $newAttributes){email}
+    updateUser(email: $email, newAttributes: $newAttributes) {
+      email
+    }
   }
 `;
 
@@ -21,8 +24,9 @@ const ShowUser = (props) => {
   const [checked, setChecked] = useState('');
   const [name, setName] = useState('');
   const [updateUser] = useMutation(UPDATE_USER);
+  const history = useHistory();
 
-//   console.log(user);
+  //   console.log(user);
   useEffect(() => {
     if (user) {
       setChecked(user.role);
@@ -37,25 +41,25 @@ const ShowUser = (props) => {
       email: user.email,
       name,
       role: checked,
-      __typename: "User"
+      __typename: 'User',
     };
 
-    console.log(newUser)
+    console.log(newUser);
     const response = await updateUser({
       variables: {
         email: user.email,
-        newAttributes: { 
-            // UserAttributesInput: {
-                name,
-                role: newUser.role
-            // }
-        }
+        newAttributes: {
+          name,
+          role: newUser.role,
+        },
       },
     });
 
     if (response) {
       console.log(response);
       setUser(newUser);
+      history.push("/");
+      document.location.reload()
     }
   };
 
