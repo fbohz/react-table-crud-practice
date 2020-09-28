@@ -86,7 +86,7 @@ const Users = ({ data }) => {
 
   return (
     <Container>
-      <button style={{ display: 'none' }} onClick={resetUsers}>
+      <button style={{ display: 'block' }} onClick={resetUsers}>
         RESET
       </button>
       <form>

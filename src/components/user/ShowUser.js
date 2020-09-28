@@ -39,7 +39,7 @@ const ShowUser = (props) => {
       __typename: 'User',
     };
 
-    console.log(newUser);
+    // console.log(newUser);
     const response = await updateUser({
       variables: {
         email: user.email,

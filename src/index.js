@@ -41,7 +41,7 @@ const ALL_USERS_QUERY = gql`
 
 const App = () => {
   const { loading, error, data } = useQuery(ALL_USERS_QUERY);
-  console.log(process.env)
+  // console.log(process.env)
 
   if (loading) {
     return <p>Loading...</p>;
